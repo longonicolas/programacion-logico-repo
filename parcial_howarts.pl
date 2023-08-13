@@ -150,16 +150,17 @@ puntajeTotal(Casa,PuntajeTotal):-
         PuntosDeCasa),
     sum_list(PuntosDeCasa,PuntajeTotal).
 
+% PUNTO 3
+
 casaGanadora(Casa):-
     puntajeTotal(Casa,PuntajeGanador),
     forall((puntajeTotal(OtraCasa,OtroPuntaje), Casa \= OtraCasa),
             PuntajeGanador > OtroPuntaje).
 
+% PUNTO 4
 
-            /*casaGanadora(Casa):-
-                puntajeTotal(Casa,PuntajeGanador),
-                forall(
-                (puntajeTotal(OtraCasa,OtroPuntaje), 
-                Casa \= OtraCasa),
-                PuntajeGanador > OtroPuntaje).*/
+
+
+
+           
             
