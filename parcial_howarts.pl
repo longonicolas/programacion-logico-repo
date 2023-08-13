@@ -82,3 +82,84 @@ elementosConsecutivos(Anterior,Siguiente,Lista):-
     nth1(IndiceSiguiente,Lista,Siguiente).
     
     
+% PARTE B
+
+% PUNTO 1
+
+accion(irA(bosque),-50).
+accion(irA(seccionBiblioteca),-10).
+accion(irA(tercerPiso),-75).
+accion(andarFueraDeLaCama,-50).
+accion(irA(mazmorra),0).
+
+accion(ganarAjedrez,50).
+accion(usarIntelecto,50).
+accion(vencerAVoldemort,60).
+
+irA(bosque).
+irA(tercerPiso).
+irA(seccionBiblioteca).
+irA(mazmorra).
+
+lugaresProhibidos([bosque,tercerPiso,seccionBiblioteca]).
+
+esDe(hermione, gryffindor).
+esDe(ron, gryffindor).
+esDe(harry, gryffindor).
+esDe(draco, slytherin).
+esDe(luna, ravenclaw).
+
+hizo(harry,andarFueraDeLaCama).
+hizo(harry,irA(bosque)).
+hizo(harry,irA(tercerPiso)).
+hizo(harry,vencerAVoldemort).
+hizo(hermione,irA(tercerPiso)).
+hizo(hermione,irA(seccionBiblioteca)).
+hizo(hermione,usarIntelecto).
+hizo(draco,irA(mazmorra)).
+hizo(draco,ganarAjedrez).
+hizo(ron,ganarAjedrez).
+
+esAccionProhibida(Accion):-
+    accion(Accion,Puntaje),
+    Puntaje < 0.
+
+accionProhibida(Lugar):-
+    irA(Lugar),
+    forall(lugaresProhibidos(Lugares),not(member(Lugar,Lugares))).
+
+esBuenAlumno(UnMago):-
+    esDe(UnMago,_),
+    hizo(UnMago,_),
+    forall(hizo(UnMago,Accion),not(esAccionProhibida(Accion))).
+
+accionRecurrente(Accion):-
+    hizo(_,Accion),
+    findall(UnMago,hizo(UnMago,Accion),Acciones),
+    length(Acciones, Cantidad),
+    Cantidad > 1.
+
+% PUNTO 2
+
+% Ejemplo de funcion para sumar el total de una lista.
+
+puntajeTotal(Casa,PuntajeTotal):-
+    esDe(_,Casa),
+    findall(Puntos,
+        (esDe(UnMago,Casa),hizo(UnMago,Accion),accion(Accion,Puntos)),
+        PuntosDeCasa),
+    sum_list(PuntosDeCasa,PuntajeTotal).
+
+casaGanadora(Casa):-
+    puntajeTotal(Casa,PuntajeGanador),
+    forall((puntajeTotal(OtraCasa,OtroPuntaje), Casa \= OtraCasa),
+            PuntajeGanador > OtroPuntaje).
+
+
+            /*casaGanadora(Casa):-
+                puntajeTotal(Casa,PuntajeGanador),
+                forall(
+                (puntajeTotal(OtraCasa,OtroPuntaje), 
+                Casa \= OtraCasa),
+                PuntajeGanador > OtroPuntaje).*/
+            
